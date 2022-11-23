@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Statistic extends Model
 {
     use HasFactory;
 
@@ -14,13 +14,13 @@ class Country extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'code'];
+    protected $fillable = ['confirmed', 'deaths', 'recovered', 'country_id'];
 
     /**
-     * Get the statistics associated with the country.
+     * Get the country that owns the statistics.
      */
-    public function statistics()
+    public function country()
     {
-        return $this->hasOne(Statistic::class);
+        return $this->belongsTo(Country::class);
     }
 }

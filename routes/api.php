@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CountryStatisticController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'App\Http\Controllers\Api\V1', 'prefix' => 'v1'], function () {
     # api/v1/country
     Route::apiResource('/country', CountryController::class);
+
+    # api/v1/country/{country}/statistic
+    Route::get('/country/{country}/statistic', [CountryStatisticController::class, 'show']);
+    Route::post('/country/{country}/statistic', [CountryStatisticController::class, 'save']);
 });
