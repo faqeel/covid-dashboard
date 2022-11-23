@@ -21,4 +21,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\V1', 'prefix' => 'v1'], f
     # api/v1/country/{country}/statistic
     Route::get('/country/{country}/statistic', [CountryStatisticController::class, 'show']);
     Route::post('/country/{country}/statistic', [CountryStatisticController::class, 'save']);
+
+    # api/v1/global
+    Route::get('/global', GlobalStatisticsController::class);
 });
