@@ -15,11 +15,15 @@ const apiClient = axios.create({
  * @returns 
  */
 async function getGlobalStatistics() {
-	const response = await apiClient.get('global');
-	if (response.status === 200) {
-		return new Response(true, null, new GlobalStatistics(response.data.data));
+	try {
+		const response = await apiClient.get('global');
+		if (response.status === 200) {
+			return new Response(true, null, new GlobalStatistics(response.data.data));
+		}
+		return new Response(false, response.data.message, null);
+	} catch (error) {
+		return new Response(false, `Error getting the global statistics. (Status code: ${error.response.status})`, null);
 	}
-	return new Response(false, response.data.message, null);
 }
 
 export {
