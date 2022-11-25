@@ -145,10 +145,28 @@ async function saveCountryStatistics(countryId, confirmed, deaths, recovered) {
 	}
 }
 
+/**
+ * Calls /api/v1/fill_data endpoint.
+ * 
+ * This function will call the /api/v1/fill_data endpoint to request filling data into
+ * the database.
+ * 
+ * @returns {Response} - an internal API response object 
+ */
+async function fillData() {
+	try {
+		const response = await apiClient.get('fill_data');
+		return new Response(response.status === 200, null, null);
+	} catch (error) {
+		return errorResponse(error, 'Error requesting to fill data.');
+	}
+}
+
 export {
 	getGlobalStatistics,
 	getSummary,
 	createCountry,
 	updateCountry,
 	saveCountryStatistics,
+	fillData,
 }
