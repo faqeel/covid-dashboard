@@ -27,7 +27,14 @@
 				<h1>Country Form</h1>
 			</template>
 			<template #body>
-				<CountryForm :country="country" @loading="(status) => isLoading = status" @reloadTable="loadData" />
+				<Suspense>
+					<template #default>
+						<CountryForm :country="country" @loading="(status) => isLoading = status" @reloadTable="loadData" />
+					</template>
+					<template #fallback>
+						<ThreeDotsLoading />
+					</template>
+				</Suspense>
 			</template>
 		</modal>
 	</div>
@@ -41,6 +48,7 @@ import { getSummary } from '@/plugins/api-client';
 import { VueGoodTable } from 'vue-good-table-next';
 import Modal from '@/components/Modal.vue';
 import CountryForm from '@/components/CountryForm.vue';
+import ThreeDotsLoading from '../components/suspenses/ThreeDotsLoading.vue';
 
 import '../../css/vue-good-table-custom.css';
 

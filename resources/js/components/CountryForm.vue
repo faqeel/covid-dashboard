@@ -10,41 +10,43 @@
 			</ul>
 		</div>
 		<!-- Form -->
-		<h3>Country Information</h3>
-		<div>
-			<label class="required">Country Name</label>
-			<input v-model="countryName" type="text" placeholder="Country Name" />
-		</div>
-		<div>
-			<label class="required">Country Code</label>
-			<input v-model="countryCode" type="text" maxlength="2" max placeholder="Country Code" />
-		</div>
-		<h3>COVID-19 Statistics</h3>
-		<div>
-			<label class="required">Confirmed</label>
-			<input v-model="confirmed" type="number" min="0" placeholder="Confirmed" />
-		</div>
-		<div>
-			<label class="required">Deaths</label>
-			<input v-model="deaths" type="number" min="0" placeholder="Deaths" />
-		</div>
-		<div>
-			<label class="required">Recovered</label>
-			<input v-model="recovered" type="number" min="0" placeholder="Recovered" />
-		</div>
-		<div>
-			<button v-if="isLoading" :disabled="isLoading" class="btn gray">
-				<div class="dot-flashing"></div>
-			</button>
-			<button v-else class="btn green" :disabled="isLoading" @click="onSave">Save</button>
+		<div v-if="!errorLoadingData" class="country-form">
+			<h3>Country Information</h3>
+			<div>
+				<label class="required">Country Name</label>
+				<input v-model="countryName" type="text" placeholder="Country Name" />
+			</div>
+			<div>
+				<label class="required">Country Code</label>
+				<input v-model="countryCode" type="text" maxlength="2" max placeholder="Country Code" />
+			</div>
+			<h3>COVID-19 Statistics</h3>
+			<div>
+				<label class="required">Confirmed</label>
+				<input v-model="confirmed" type="number" min="0" placeholder="Confirmed" />
+			</div>
+			<div>
+				<label class="required">Deaths</label>
+				<input v-model="deaths" type="number" min="0" placeholder="Deaths" />
+			</div>
+			<div>
+				<label class="required">Recovered</label>
+				<input v-model="recovered" type="number" min="0" placeholder="Recovered" />
+			</div>
+			<div>
+				<button v-if="isLoading" :disabled="isLoading" class="btn gray">
+					<div class="dot-flashing"></div>
+				</button>
+				<button v-else class="btn green" :disabled="isLoading" @click="onSave">Save</button>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { createCountry, updateCountry, saveCountryStatistics } from '@/plugins/api-client';
-import { isEmpty } from '@/utils/DataUtils';
+import { getCountryStatistics, createCountry, updateCountry, saveCountryStatistics } from '@/plugins/api-client';
+import { isEmpty, isNotEmpty } from '@/utils/DataUtils';
 
 const props = defineProps({ country: Object, });
 
@@ -55,6 +57,7 @@ const showSuccess = ref(false);
 const showError = ref(false);
 const msg = ref('');
 const errors = ref([]);
+const errorLoadingData = ref(false);
 
 const countryId = ref(0);
 const countryName = ref('');
@@ -63,15 +66,24 @@ const confirmed = ref('');
 const deaths = ref('');
 const recovered = ref('');
 
-if (props.country) {
-	// If props.country is provided then the form will be
-	// populated by its data. (edit mode)
-	countryId.value = props.country.id;
-	countryName.value = props.country.name;
-	countryCode.value = props.country.code;
-	confirmed.value = props.country.statistics.confirmed;
-	deaths.value = props.country.statistics.deaths;
-	recovered.value = props.country.statistics.recovered;
+if (props.country && isNotEmpty(props.country.id)) {
+	// If a valid country id is provided then its data will
+	// be populated into the form.
+	const response = await getCountryStatistics(props.country.id);
+	if (response.success) {
+		countryId.value = response.data.id;
+		countryName.value = response.data.name;
+		countryCode.value = response.data.code;
+		if (isNotEmpty(response.data.statistics)) {
+			confirmed.value = response.data.statistics.confirmed;
+			deaths.value = response.data.statistics.deaths;
+			recovered.value = response.data.statistics.recovered;
+		}
+	} else {
+		errorLoadingData.value = true;
+		showError.value = true;
+		msg.value = 'Unable to load country data.';
+	}
 }
 
 async function onSave() {
@@ -112,7 +124,7 @@ async function onSave() {
 		} else {
 			showError.value = true;
 			msg.value = 'Country has been saved with error(s) related to its statistcs:';
-			errors.value = isEmpty(response.data) || isEmpty(response.data.error) ?
+			errors.value = isEmpty(response.data) || isEmpty(response.data.errors) ?
 				[] : Object.values(response.data.errors).map((error) => error[0]);
 		}
 
@@ -165,11 +177,12 @@ function validate() {
 </script>
 
 <style scoped>
-.country-form-container>div {
+.country-form-container>div,
+.country-form>div {
 	margin: 0.5rem 0;
 }
 
-.country-form-container>div:last-child {
+.country-form>div:last-child {
 	margin: 1.25rem 0;
 }
 
