@@ -29,7 +29,7 @@ p {
 
 .skeleton-text {
 	display: block;
-	height: 1.25rem;
+	height: 0.75rem;
 	background: #eee;
 	background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
 	border-radius: 5px;
