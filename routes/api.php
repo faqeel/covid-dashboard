@@ -27,4 +27,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\V1', 'prefix' => 'v1'], f
 
     # api/v1/summary
     Route::get('/summary', SummaryController::class);
+
+    # api/v1/fill_data
+    Route::match (['get', 'post'], '/fill_data', FillDataController::class);
 });

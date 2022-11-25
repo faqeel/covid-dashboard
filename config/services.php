@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'covid19api' => [
+        'url' => env('COVID19_API_URL'),
+    ],
+
 ];
