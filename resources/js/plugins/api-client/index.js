@@ -121,9 +121,34 @@ async function updateCountry(id, name, code) {
 	}
 }
 
+/**
+ * Calls POST /api/v1/country/{countryId}/statistic endpoint.
+ * 
+ * This function will call the /api/v1/country/{countryId}/statistic endpoint to update
+ * or create a country statistics.
+ * 
+ * @param {number} countryId - the id of the country
+ * @param {number} confirmed - the number of the confirmed cases
+ * @param {number} deaths - the number of the deaths cases
+ * @param {number} recovered - the number of the recovered cases
+ * @returns {Response} - an internal API response object
+ */
+async function saveCountryStatistics(countryId, confirmed, deaths, recovered) {
+	try {
+		const response = await apiClient.post(`country/${countryId}/statistic`, { confirmed, deaths, recovered });
+		if (response.status === 200) {
+			return new Response(true, null, new Country(response.data.data));
+		}
+		return new Response(false, response.data.message, null);
+	} catch (error) {
+		return errorResponse(error, 'Error saving the country statistics.');
+	}
+}
+
 export {
 	getGlobalStatistics,
 	getSummary,
 	createCountry,
 	updateCountry,
+	saveCountryStatistics,
 }
