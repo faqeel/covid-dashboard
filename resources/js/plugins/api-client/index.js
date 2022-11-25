@@ -122,6 +122,27 @@ async function updateCountry(id, name, code) {
 }
 
 /**
+ * Calls GET /api/v1/country/{countryId}/statistic endpoint.
+ * 
+ * This function will call the /api/v1/country/{countryId}/statistic endpoint to get
+ * a country with is statistics.
+ * 
+ * @param {number} countryId - the id of the country
+ * @returns {Response} - an internal API response object
+ */
+async function getCountryStatistics(countryId) {
+	try {
+		const response = await apiClient.get(`country/${countryId}/statistic`);
+		if (response.status === 200) {
+			return new Response(true, null, new Country(response.data.data));
+		}
+		return new Response(false, response.data.message, null);
+	} catch (error) {
+		return errorResponse(error, 'Error getting country statistics.');
+	}
+}
+
+/**
  * Calls POST /api/v1/country/{countryId}/statistic endpoint.
  * 
  * This function will call the /api/v1/country/{countryId}/statistic endpoint to update
@@ -167,6 +188,7 @@ export {
 	getSummary,
 	createCountry,
 	updateCountry,
+	getCountryStatistics,
 	saveCountryStatistics,
 	fillData,
 }
