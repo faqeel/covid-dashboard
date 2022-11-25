@@ -3,6 +3,7 @@ import axios from "axios";
 import Response from './Response'
 import GlobalStatistics from "./models/GlobalStatistics";
 import Summary from "./models/Summary";
+import Country from "./models/Country";
 
 /**
  * 
@@ -77,7 +78,52 @@ async function getSummary() {
 	}
 }
 
+/**
+ * Calls POST /api/v1/country endpoint.
+ * 
+ * This function will call the /api/v1/country endpoint to create a new country.
+ * 
+ * @param {string} name - the name of the country
+ * @param {string} code - the code of the country 
+ * @returns {Response} - an internal API response object
+ */
+async function createCountry(name, code) {
+	try {
+		const response = await apiClient.post('country', { name, code });
+		if (response.status === 201) {
+			return new Response(true, null, new Country(response.data.data));
+		}
+		return new Response(false, response.data.message, null);
+	} catch (error) {
+		return errorResponse(error, 'Error creating a new country.');
+	}
+}
+
+/**
+ * Calls PUT /api/v1/country endpoint.
+ * 
+ * This function will call the /api/v1/country endpoint to update an existing country.
+ * 
+ * @param {number} id - the id of the country
+ * @param {string} name - the name of the country
+ * @param {string} code - the code of the country 
+ * @returns {Response} - an internal API response object
+ */
+async function updateCountry(id, name, code) {
+	try {
+		const response = await apiClient.put(`country/${id}`, { name, code });
+		if (response.status === 200) {
+			return new Response(true, null, new Country(response.data.data));
+		}
+		return new Response(false, response.data.message, null);
+	} catch (error) {
+		return errorResponse(error, 'Error updating the country.');
+	}
+}
+
 export {
 	getGlobalStatistics,
 	getSummary,
+	createCountry,
+	updateCountry,
 }
