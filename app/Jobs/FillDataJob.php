@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Country;
 use App\Models\GlobalStatistics;
 use App\Models\Statistic;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -95,7 +94,7 @@ class FillDataJob implements ShouldQueue, ShouldBeUnique
             return;
         }
         GlobalStatistics::updateOrCreate(
-            ['stat_date' => Carbon::now()],
+            ['stat_date' => substr($data->Date, 0, 10)],
             [
                 'confirmed' => $data->TotalConfirmed,
                 'deaths' => $data->TotalDeaths,
