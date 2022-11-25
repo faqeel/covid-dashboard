@@ -22,15 +22,21 @@ const apiClient = axios.create({
  * @returns {Response} - an internal API response object
  */
 function errorResponse(error, message) {
+	let data = null;
 	if (error.response) {
 		// The request was made and the server responded with a status code
 		// that falls out of the range of 2xx
-		message += ` (Status code: ${error.response.status})`;
+		if (error.response.status === 422) {
+			data = error.response.data;
+			message = error.response.data.message;
+		} else {
+			message += ` (Status code: ${error.response.status})`;
+		}
 	} else if (error.request) {
 		// The request was made but no response was received
 		message += ' (No response)';
 	}
-	return new Response(false, message, null);
+	return new Response(false, message, data);
 }
 
 /**
