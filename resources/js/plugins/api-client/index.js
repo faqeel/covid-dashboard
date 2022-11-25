@@ -6,7 +6,9 @@ import Summary from "./models/Summary";
 import Country from "./models/Country";
 
 /**
+ * Create a new instance of axios.
  * 
+ * @link https://axios-http.com/docs/instance
  */
 const apiClient = axios.create({
 	baseURL: import.meta.env.VITE_APP_URL + '/api/v1/',
@@ -41,8 +43,14 @@ function errorResponse(error, message) {
 }
 
 /**
+ * Calls GET /api/v1/global endpoint.
  * 
- * @returns 
+ * This function will call the /api/v1/global endpoint. If a successful response is
+ * received, the HTTP response will be converted to a GlobalStatistics object, and encapsulate the
+ * created GlobalStatistics object in an internal API response object.
+ * 
+ * @see {GlobalStatistics} - the data that will be encapsulated in the internal API response
+ * @returns {Response} - an internal API response object
  */
 async function getGlobalStatistics() {
 	try {
