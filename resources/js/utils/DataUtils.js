@@ -11,21 +11,26 @@ export function toCommas(str) {
 }
 
 /**
+ * Determine whether the given object is empty.
  * 
- * @param {*} object 
- * @returns 
+ * @param {*} object - the object to check
+ * @returns - true if the object is null or empty
  */
 export function isEmpty(object) {
 	if (object === null || object === undefined) {
 		return true;
 	}
+	if (typeof object === 'string') {
+		return object.trim().length === 0;
+	}
 	return false;
 }
 
 /**
+ * Determine whether the given object is not empty.
  * 
- * @param {*} object 
- * @returns 
+ * @param {*} object - the object to check
+ * @returns - true if the object is not empty
  */
 export function isNotEmpty(object) {
 	return !isEmpty(object);
