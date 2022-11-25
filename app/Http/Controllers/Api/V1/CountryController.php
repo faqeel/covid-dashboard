@@ -17,7 +17,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        return CountryResource::collection(Country::paginate(10));
+        return CountryResource::collection(Country::orderBy('name')->paginate(10));
     }
 
     /**

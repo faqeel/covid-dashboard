@@ -20,7 +20,7 @@ class SummaryController extends Controller
     {
         return new SummaryResource([
             'global' => GlobalStatistics::latest('stat_date')->first(),
-            'countries' => Country::all()
+            'countries' => Country::orderBy('name')->get(),
         ]);
     }
 }
