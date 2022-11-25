@@ -9,6 +9,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { fillData } from '@/plugins/api-client';
 
 const ORIGINAL_MSG = 'Fetch';
 const SUCCESS_MSG = 'Queued ✅';
@@ -21,24 +22,13 @@ const message = ref(ORIGINAL_MSG);
 
 async function onFetch() {
 	isLoading.value = true;
-	try {
-		// TODO: Call /fill_data 
-		// Simulate HTTP request
-		await new Promise((resolve, reject) => {
-			setTimeout(() => {
-				if (true) {
-					updateFetchStatus(showSuccess, SUCCESS_MSG);
-					resolve();
-				} else {
-					reject();
-				}
-			}, 2000);
-		});
-	} catch (error) {
+	const { success } = await fillData();
+	if (success) {
+		updateFetchStatus(showSuccess, SUCCESS_MSG)
+	} else {
 		updateFetchStatus(showError, ERROR_MSG);
-	} finally {
-		isLoading.value = false;
 	}
+	isLoading.value = false;
 }
 
 function updateFetchStatus(status, msg) {
