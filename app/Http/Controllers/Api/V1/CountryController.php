@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\StoreCountryRequest;
 use App\Http\Requests\Api\V1\UpdateCountryRequest;
 use App\Http\Resources\Api\V1\CountryResource;
 use App\Models\Country;
+use Illuminate\Support\Facades\Config;
 
 class CountryController extends Controller
 {
@@ -17,7 +18,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        return CountryResource::collection(Country::orderBy('name')->paginate(10));
+        return CountryResource::collection(Country::orderBy('name')->paginate(Config::get('app.paginate.perPage')));
     }
 
     /**
