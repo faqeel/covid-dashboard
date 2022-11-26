@@ -22,7 +22,7 @@ cd covid-dashboard
 
 **2. Install The Application's Dependencies**
 
-Run the following command to install the application's dependencies:
+Run the following commands to install the application's dependencies:
 
 ```sh
 docker run --rm \
@@ -33,9 +33,9 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-**3. Create `.env` file**
+**3. Configure `.env` file**
 
-Copy the `.env.example` file to `.env` file. *There is no need to configure/update the `.env` file as it will be configured later by Laravel Sail.*
+Copy the `.env.example` file to `.env` file on the root directory.
 
 ```sh
 # Windows
@@ -44,32 +44,18 @@ copy .env.example .env
 cp .env.example .env 
 ```
 
-**4. Replace the host variables in the `.env` file**
+Set the `DB_HOST` environment variable to `mysql`: 
 
-> You can configure a shell alias for the Sail command. Please refer to the [Configuring A Shell Alias](https://laravel.com/docs/9.x/sail#configuring-a-shell-alias) section.
+```
+DB_HOST=mysql
+```
 
-Start the Laravel Sail by running the following command:
+Update the `DB_USERNAME` and `DB_PASSWORD` environment variables if required.
+
+**4. Start Laravel Sail**
 
 ```sh
 ./vendor/bin/sail up
-```
-
-Run the following command to republish Sail's `docker-compose.yml` file and update the host environment variables in the `.env` file. After running the command, you will be asked to choose the services to be installed. Choose `mysql` by entering `0`.
-
-```sh
-./vendor/bin/sail artisan sail:install
-
-Which services would you like to install? [mysql]:
- [0] mysql
- [1] pgsql
- [2] mariadb
- [3] redis
- [4] memcached
- [5] meilisearch
- [6] minio
- [7] mailhog
- [8] selenium
-> 0
 ```
 
 **5. Generate Application Key**
@@ -90,7 +76,7 @@ Which services would you like to install? [mysql]:
 ./vendor/bin/sail npm install
 ```
 
-Finally, it would be better if you restart the application by running the following command:
+**8. Restart Laravel Sail**
 
 ```sh
 ./vendor/bin/sail restart
