@@ -3,16 +3,13 @@
 This is a web application project to track COVID-19 cases around the world. It was built with Laravel 9 and Vue.js 3.
 
 ## Getting Started
-This section shows how to run the project on your local machine using [Laravel Sail](https://laravel.com/docs/9.x/sail).
+This section shows how to set up a local development environment using [Laravel Sail](https://laravel.com/docs/9.x/sail).
 
 ### Prerequisites
-In order to run this project locally, you need to make sure that [Docker](https://www.docker.com/) is installed on your machine.
+In order to run this project locally, make sure to have [Git](https://git-scm.com/) and [Docker](https://www.docker.com/) installed.
 
 ### Installation
-
-**1. Download The Project**
-
-Clone (or download) the repo to your local computer and navigate to the application's directory:
+Clone (or download) the repository to your local computer and navigate to the project's directory:
 
 ```sh
 git clone https://github.com/faqeel/covid-dashboard.git
@@ -20,9 +17,7 @@ git clone https://github.com/faqeel/covid-dashboard.git
 cd covid-dashboard
 ```
 
-**2. Install The Application's Dependencies**
-
-Run the following commands to install the application's dependencies:
+Run the following commands to install the project's dependencies:
 
 ```sh
 docker run --rm \
@@ -33,9 +28,8 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-**3. Configure `.env` file**
-
-Copy the `.env.example` file to `.env` file on the root directory.
+### Configure Environment Variables
+Copy the `.env.example` file to `.env`.
 
 ```sh
 # Windows
@@ -50,57 +44,51 @@ Set the `DB_HOST` environment variable to `mysql`:
 DB_HOST=mysql
 ```
 
-Update the `DB_USERNAME` and `DB_PASSWORD` environment variables if required.
+### Last Steps  
 
-**4. Start Laravel Sail**
+Run the following commands:
 
 ```sh
+# start laravel sail
 ./vendor/bin/sail up
-```
 
-**5. Generate Application Key**
-
-```sh
+# generate an app key
 ./vendor/bin/sail artisan key:generate
-```
 
-**6. Run Database Migrations**
-
-```sh
+# migrate the database
 ./vendor/bin/sail artisan migrate
-```
 
-**7. Install NPM Dependencies**
-
-```sh
+# install npm dependencies
 ./vendor/bin/sail npm install
-```
 
-**8. Restart Laravel Sail**
-
-```sh
+# restart laravel sail
 ./vendor/bin/sail restart
 ```
 
-### Running the project
+## Running the project
 
-Start Laravel Sail:
+> **Note**
+> The project can be stopped by running `./vendor/bin/sail stop`
 
-```sh
-./vendor/bin/sail up -d
-```
-
-Start the Vite development server (or just build the project):
+To start the project, simply run the following commands:
 
 ```sh
-# Run Vite development server
-./vendor/bin/sail npm run dev
-# Build the project 
+# start laravel sail
+./vendor/bin/sail up -d # detached mode
+
+# build the project...
 ./vendor/bin/sail npm run build
+# or run the Vite development server instead
+./vendor/bin/sail npm run dev
 ```
-The application will be running on `http://localhost`.
 
-### Populate Database
+That's it, you can access the web application by visiting this URL `http://localhost`. 🥳
+
+### Populate The Database
+
+When visiting the web application for the first time, no data will be displayed as we still need to send a *fetch* request in order to run the `FillDataJob`.
+
+#### Start The Fill Data Job
 
 Run the queue worker using the following command:
 
@@ -108,4 +96,6 @@ Run the queue worker using the following command:
 ./vendor/bin/sail artisan queue:work
 ```
 
-Go to the web application, `http://localhost`, and click on the *fetch* button which can be found on the top right of the page. The `FillDataJob` will start running and populate data into the database.
+#### Send a Fetch Request
+
+Go to the web application, and click on the *fetch* button which can be found on the top right of the page. The `FillDataJob` will start running and populate data into the database.
