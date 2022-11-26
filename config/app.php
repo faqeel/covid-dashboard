@@ -212,4 +212,17 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Pagination
+    |--------------------------------------------------------------------------
+    |
+    | This configuration option should be used to create default pagination
+    | settings over the application.
+    |
+    */
+
+    'paginate' => [
+        'perPage' => env('APP_PAGINATE_PERPAGE', 10)
+    ]
 ];
