@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isEmpty } from "./Utils";
 
 import Response from './Response'
 import GlobalStatistics from "./models/GlobalStatistics";
@@ -56,7 +57,7 @@ async function getGlobalStatistics() {
 	try {
 		const response = await apiClient.get('global');
 		if (response.status === 200) {
-			return new Response(true, null, new GlobalStatistics(response.data.data));
+			return new Response(true, null, isEmpty(response.data.data) ? null : new GlobalStatistics(response.data.data));
 		}
 		return new Response(false, response.data.message, null);
 	} catch (error) {

@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { isEmpty, toCommas } from '@/utils/DataUtils';
+import { isEmpty, isNotEmpty, toCommas } from '@/utils/DataUtils';
 import { getGlobalStatistics } from '@/plugins/api-client';
 
 import StatisticItem from './StatisticItem.vue';
@@ -21,7 +21,7 @@ const recovered = ref(UNDEFINED_VALUE_MESSAGE);
 
 const { success, data } = await getGlobalStatistics();
 
-if (success) {
+if (success && isNotEmpty(data)) {
 	confirmed.value = isEmpty(data.confirmed) || data.confirmed == -1 ?
 		UNDEFINED_VALUE_MESSAGE : data.confirmed.toString();
 	deaths.value = isEmpty(data.deaths) || data.deaths == -1 ?

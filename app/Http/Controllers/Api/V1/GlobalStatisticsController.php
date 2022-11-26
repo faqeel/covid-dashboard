@@ -17,6 +17,10 @@ class GlobalStatisticsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return new GlobalStatisticsResource(GlobalStatistics::latest('stat_date')->first());
+        $statistics = GlobalStatistics::latest('stat_date')->first();
+        if ($statistics) {
+            return new GlobalStatisticsResource($statistics);
+        }
+        return response()->json(['data' => null]);
     }
 }
