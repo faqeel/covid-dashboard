@@ -44,6 +44,7 @@
 import { ref } from 'vue';
 import { toCommas } from '@/utils/DataUtils';
 import { getSummary } from '@/plugins/api-client';
+import config from '@/config';
 
 import { VueGoodTable } from 'vue-good-table-next';
 import Modal from '@/components/Modal.vue';
@@ -93,7 +94,7 @@ const sortOptions = {
 
 const paginationOptions = {
 	enabled: true,
-	perPage: 10,
+	perPage: config.app.paginate.perPage,
 	perPageDropdownEnabled: false,
 }
 
