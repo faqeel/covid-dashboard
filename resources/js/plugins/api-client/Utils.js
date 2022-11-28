@@ -10,3 +10,9 @@ export function isEmpty(object) {
     }
     return false;
 }
+
+export const HttpStatusCode = {
+    OK: 200,
+    CREATED: 201,
+    UNPROCESSABLE_ENTITY: 422,
+};

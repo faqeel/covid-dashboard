@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { HttpStatusCode } from './Utils';
 
 import Response from './Response';
 import { GlobalStatisticsFactory } from './models/GlobalStatistics';
@@ -28,7 +29,7 @@ function errorResponse(error, message) {
     if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        if (error.response.status === 422) {
+        if (error.response.status === HttpStatusCode.UNPROCESSABLE_ENTITY) {
             data = error.response.data;
             message = error.response.data.message;
         } else {
@@ -54,7 +55,7 @@ function errorResponse(error, message) {
 async function getGlobalStatistics() {
     try {
         const response = await apiClient.get('global');
-        if (response.status === 200) {
+        if (response.status === HttpStatusCode.OK) {
             return new Response(
                 true,
                 null,
@@ -80,7 +81,7 @@ async function getGlobalStatistics() {
 async function getSummary() {
     try {
         const response = await apiClient.get('summary');
-        if (response.status === 200) {
+        if (response.status === HttpStatusCode.OK) {
             return new Response(
                 true,
                 null,
@@ -105,7 +106,7 @@ async function getSummary() {
 async function createCountry(name, code) {
     try {
         const response = await apiClient.post('country', { name, code });
-        if (response.status === 201) {
+        if (response.status === HttpStatusCode.CREATED) {
             return new Response(
                 true,
                 null,
@@ -131,7 +132,7 @@ async function createCountry(name, code) {
 async function updateCountry(id, name, code) {
     try {
         const response = await apiClient.put(`country/${id}`, { name, code });
-        if (response.status === 200) {
+        if (response.status === HttpStatusCode.OK) {
             return new Response(
                 true,
                 null,
@@ -156,7 +157,7 @@ async function updateCountry(id, name, code) {
 async function getCountryStatistics(countryId) {
     try {
         const response = await apiClient.get(`country/${countryId}/statistic`);
-        if (response.status === 200) {
+        if (response.status === HttpStatusCode.OK) {
             return new Response(
                 true,
                 null,
@@ -187,7 +188,7 @@ async function saveCountryStatistics(countryId, confirmed, deaths, recovered) {
             `country/${countryId}/statistic`,
             { confirmed, deaths, recovered }
         );
-        if (response.status === 200) {
+        if (response.status === HttpStatusCode.OK) {
             return new Response(
                 true,
                 null,
@@ -211,7 +212,7 @@ async function saveCountryStatistics(countryId, confirmed, deaths, recovered) {
 async function fillData() {
     try {
         const response = await apiClient.get('fill_data');
-        return new Response(response.status === 200, null, null);
+        return new Response(response.status === HttpStatusCode.OK, null, null);
     } catch (error) {
         return errorResponse(error, 'Error requesting to fill data.');
     }
