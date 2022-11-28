@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { isEmpty } from './Utils';
 
 import Response from './Response';
-import GlobalStatistics from './models/GlobalStatistics';
-import Summary from './models/Summary';
-import Country from './models/Country';
+import { GlobalStatisticsFactory } from './models/GlobalStatistics';
+import { SummaryFactory } from './models/Summary';
+import { CountryFactory } from './models/Country';
 
 /**
  * Create a new instance of axios.
@@ -59,9 +58,7 @@ async function getGlobalStatistics() {
             return new Response(
                 true,
                 null,
-                isEmpty(response.data.data)
-                    ? null
-                    : new GlobalStatistics(response.data.data)
+                GlobalStatisticsFactory.create(response.data.data)
             );
         }
         return new Response(false, response.data.message, null);
@@ -84,7 +81,11 @@ async function getSummary() {
     try {
         const response = await apiClient.get('summary');
         if (response.status === 200) {
-            return new Response(true, null, new Summary(response.data.data));
+            return new Response(
+                true,
+                null,
+                SummaryFactory.create(response.data.data)
+            );
         }
         return new Response(false, response.data.message, null);
     } catch (error) {
@@ -105,7 +106,11 @@ async function createCountry(name, code) {
     try {
         const response = await apiClient.post('country', { name, code });
         if (response.status === 201) {
-            return new Response(true, null, new Country(response.data.data));
+            return new Response(
+                true,
+                null,
+                CountryFactory.create(response.data.data)
+            );
         }
         return new Response(false, response.data.message, null);
     } catch (error) {
@@ -127,7 +132,11 @@ async function updateCountry(id, name, code) {
     try {
         const response = await apiClient.put(`country/${id}`, { name, code });
         if (response.status === 200) {
-            return new Response(true, null, new Country(response.data.data));
+            return new Response(
+                true,
+                null,
+                CountryFactory.create(response.data.data)
+            );
         }
         return new Response(false, response.data.message, null);
     } catch (error) {
@@ -148,7 +157,11 @@ async function getCountryStatistics(countryId) {
     try {
         const response = await apiClient.get(`country/${countryId}/statistic`);
         if (response.status === 200) {
-            return new Response(true, null, new Country(response.data.data));
+            return new Response(
+                true,
+                null,
+                CountryFactory.create(response.data.data)
+            );
         }
         return new Response(false, response.data.message, null);
     } catch (error) {
@@ -175,7 +188,11 @@ async function saveCountryStatistics(countryId, confirmed, deaths, recovered) {
             { confirmed, deaths, recovered }
         );
         if (response.status === 200) {
-            return new Response(true, null, new Country(response.data.data));
+            return new Response(
+                true,
+                null,
+                CountryFactory.create(response.data.data)
+            );
         }
         return new Response(false, response.data.message, null);
     } catch (error) {
